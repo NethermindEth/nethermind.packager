@@ -1,0 +1,16 @@
+﻿@model Nethermind.Packager.Web.ViewModels.DownloadsViewModel
+
+@{
+    ViewData["Title"] = "Downloads";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@foreach (var release in Model.Releases)
+{
+    <div class="row">
+        <div class="col-lg-12">
+            @await Html.PartialAsync("_Release", release)
+        </div>
+    </div>
+}

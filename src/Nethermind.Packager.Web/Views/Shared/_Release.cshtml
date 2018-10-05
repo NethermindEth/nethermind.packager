@@ -1,0 +1,36 @@
+@model Nethermind.Packager.Web.ViewModels.ReleaseViewModel
+
+@{
+    var linkCounter = 1;
+    var tabCounter = 1;
+}
+
+<h3>@Model.Title</h3>
+<h4>@Model.Description</h4>
+<hr/>
+<ul class="nav nav-tabs" role="tablist">
+    @foreach (var platform in Model.Platforms.OrderBy(p => p.Order))
+    {
+        <li class="@(linkCounter == 1 ? "active" : string.Empty)">
+            <a data-toggle="tab" href="#@GetTabId(platform.Name)">@platform.Name</a>
+        </li>
+        linkCounter++;
+    }
+</ul>
+
+<div class="tab-content">
+    @foreach (var platform in Model.Platforms.OrderBy(p => p.Order))
+    {
+        <div id="@GetTabId(platform.Name)" role="tabpanel" 
+             class="table-responsive tab-pane fade in @(tabCounter == 1 ? "active" : string.Empty)">
+            @await Html.PartialAsync("_Platform", platform)
+        </div>
+        tabCounter++;
+    }
+</div>
+
+@functions
+{
+    string GetTabId(string platform)
+        => $"{Model.Type.ToLowerInvariant()}_{platform.ToLowerInvariant()}";
+}

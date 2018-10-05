@@ -1,0 +1,32 @@
+@model Nethermind.Packager.Web.ViewModels.PlatformViewModel
+
+
+<table class="table table-responsive table-striped">
+    <thead>
+    <tr style="font-weight: bold">
+        <td>Release</td>
+        <td>Commit</td>
+        <td>Kind</td>
+        <td>Arch</td>
+        <td>Size</td>
+        <td>Published</td>
+        <td>Signature</td>
+        <td>Checksum (MD5)</td>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var package in Model.Packages)
+    {
+        <tr>
+            <td><a href="@package.Url">@package.Name</a></td>
+            <td>@package.Commit</td>
+            <td>@package.Kind</td>
+            <td>@package.Arch</td>
+            <td>@package.Size</td>
+            <td>@package.PublishedAt.Date.ToShortDateString()</td>
+            <td>@package.Signature</td>
+            <td>@package.Checksum</td>
+        </tr>
+    }
+    </tbody>
+</table>
