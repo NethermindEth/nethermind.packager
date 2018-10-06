@@ -11,8 +11,8 @@
 <ul class="nav nav-tabs" role="tablist">
     @foreach (var platform in Model.Platforms.OrderBy(p => p.Order))
     {
-        <li class="@(linkCounter == 1 ? "active" : string.Empty)">
-            <a data-toggle="tab" href="#@GetTabId(platform.Name)">@platform.Name</a>
+        <li class="nav-item">
+            <a class="nav-link  @(linkCounter == 1 ? "active" : string.Empty)" data-toggle="tab" href="#@GetTabId(platform.Name)">@platform.Name</a>
         </li>
         linkCounter++;
     }
@@ -21,8 +21,7 @@
 <div class="tab-content">
     @foreach (var platform in Model.Platforms.OrderBy(p => p.Order))
     {
-        <div id="@GetTabId(platform.Name)" role="tabpanel" 
-             class="table-responsive tab-pane fade in @(tabCounter == 1 ? "active" : string.Empty)">
+        <div id="@GetTabId(platform.Name)" role="tabpanel" class="tab-pane fade @(tabCounter == 1 ? "show active" : string.Empty)">
             @await Html.PartialAsync("_Platform", platform)
         </div>
         tabCounter++;
