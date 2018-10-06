@@ -6,6 +6,7 @@ namespace Nethermind.Packager.Web.ViewModels
     {
         public int Order { get; set; }
         public string Name { get; set; }
+        public string Repository { get; set; }
         public IEnumerable<PackageViewModel> Packages { get; set; }
     }
 }

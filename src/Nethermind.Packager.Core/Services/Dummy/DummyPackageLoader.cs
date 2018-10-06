@@ -27,7 +27,7 @@ namespace Nethermind.Packager.Core.Services.Dummy
         private PackageDto Create()
             => new PackageDto
             {
-                Name = $"Nethermindd_{Random.Next(1, 10)}.{Random.Next(1, 10)}.{Random.Next(1, 10)}",
+                Name = $"Nethermind_{Random.Next(1, 10)}.{Random.Next(1, 10)}.{Random.Next(1, 10)}",
                 Arch = "X64",
                 Commit = Guid.NewGuid().ToString("N").Substring(0, 6),
                 Size = (long) (Random.NextDouble() * Random.Next(100000, 150000)),

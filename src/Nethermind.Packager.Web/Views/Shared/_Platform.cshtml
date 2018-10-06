@@ -19,14 +19,20 @@
     {
         <tr>
             <td><a href="@package.Url">@package.Name</a></td>
-            <td>@package.Commit</td>
+            <td><a href="@GetCommitUrl(package.Commit)">@package.Commit</a></td>
             <td>@package.Kind</td>
             <td>@package.Arch</td>
             <td>@package.Size</td>
             <td>@package.PublishedAt.Date.ToShortDateString()</td>
-            <td>@package.Signature</td>
+            <td><a href="@package.SignatureUrl">Signature</a></td>
             <td>@package.Checksum</td>
         </tr>
     }
     </tbody>
 </table>
+
+@functions
+{
+    string GetCommitUrl(string commit)
+        => $"{Model.Repository}/tree/{commit}";
+}

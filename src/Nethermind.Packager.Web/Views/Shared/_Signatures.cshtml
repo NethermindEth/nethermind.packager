@@ -1,0 +1,29 @@
+@model Nethermind.Packager.Web.ViewModels.SignaturesViewModel
+
+<table class="table table-responsive table-striped">
+    <thead>
+    <tr style="font-weight: bold">
+        <td>@Model.Type</td>
+        <td>Unique ID</td>
+        <td>Open PGP Key</td>
+        <td>Fingerprint</td>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var signature in Model.Signatures)
+    {
+        <tr>
+            <td>@signature.Name</td>
+            <td>@signature.UniqueId</td>
+            <td><a href="@GetPublicKeyUrl(signature.PublicKey)">@signature.PublicKey</a></td>
+            <td>@signature.Fingerprint</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@functions
+{
+    string GetPublicKeyUrl(string publicKey)
+        => $"https://keyserver.ubuntu.com/pks/lookup?op=get&search={publicKey}";
+}

@@ -24,6 +24,11 @@ namespace Nethermind.Packager.Core.Services.Storage.Azure
 
         public async Task<IEnumerable<PackageDto>> GetAllAsync()
         {
+            if (!_packageOptions.Value.Releases.Any())
+            {
+                return Enumerable.Empty<PackageDto>();
+            }
+
             var content = await _storageClient.GetContentAsync();
 
             return string.IsNullOrWhiteSpace(content) ? Enumerable.Empty<PackageDto>() : GetPackages(content);
@@ -57,7 +62,7 @@ namespace Nethermind.Packager.Core.Services.Storage.Azure
             }
 
             var partialPackage = CreatePartialPackage(parts);
-            var releases = _packageOptions.Value.Releases.Select(r => r.ToLowerInvariant());
+            var releases = _packageOptions.Value.Releases.Select(r => r.Key.ToLowerInvariant());
 
             return releases.Contains(partialPackage.Release.ToLowerInvariant())
                 ? CreatePackage(partialPackage, extension, blob)
@@ -71,7 +76,7 @@ namespace Nethermind.Packager.Core.Services.Storage.Azure
             var arch = parts[2];
             var version = parts[3];
             var commit = parts[4];
-            var release = _packageOptions.Value.DefaultRelease;
+            var release = _packageOptions.Value.Releases.First().Key;
             if (parts.Length == 6)
             {
                 release = parts[4];

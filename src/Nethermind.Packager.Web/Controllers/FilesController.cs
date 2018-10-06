@@ -17,9 +17,9 @@ namespace Nethermind.Packager.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(List<IFormFile> files, string @from)
+        public async Task<ActionResult> Post(List<IFormFile> files, string apiKey)
         {
-            await _packageUploader.UploadAsync(files, @from);
+            await _packageUploader.UploadAsync(files, apiKey);
 
             return NoContent();
         }

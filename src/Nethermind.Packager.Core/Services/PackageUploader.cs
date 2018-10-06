@@ -54,7 +54,7 @@ namespace Nethermind.Packager.Core.Services
             }
 
             var availableExtensions = _packageOptions.Value.Extensions.Select(e => e.Key.ToLowerInvariant()).ToList();
-            var filesExtensions = files.Select(f => GetExtension(f.Name).ToLowerInvariant()).ToList();
+            var filesExtensions = files.Select(f => GetExtension(f.FileName).ToLowerInvariant()).ToList();
 
             if (!availableExtensions.Intersect(filesExtensions).Any())
             {

@@ -37,9 +37,9 @@ namespace Nethermind.Packager.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            services.Configure<AccessOptions>(Configuration.GetSection("access"));
             services.Configure<PackageOptions>(Configuration.GetSection("package"));
             services.Configure<StorageOptions>(Configuration.GetSection("storage"));
-            services.Configure<ValidatorOptions>(Configuration.GetSection("validator"));
             services.AddTransient<IDownloadsViewModelProvider, DownloadsViewModelProvider>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddHttpClient<IStorageClient, AzureStorageClient>();
