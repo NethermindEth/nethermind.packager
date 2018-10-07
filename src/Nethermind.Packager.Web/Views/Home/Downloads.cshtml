@@ -4,7 +4,21 @@
     ViewData["Title"] = "Downloads";
 }
 
-<h2>@ViewData["Title"]</h2>
+@if (Model.LatestRelease != null)
+{
+    <header class="bg-secondary text-white">
+        <div class="container text-center">
+            <h1>Download @Model.LatestRelease.Platforms.First().Packages.First().Name
+            </h1>
+            <p class="lead">Download the latest 64 bit version of Nethermind for one of the platforms below</p>
+            @foreach (var platform in Model.LatestRelease.Platforms)
+            {
+                
+                <a href="@platform.Packages.First().Url" class="btn btn-primary">@platform.Name</a>
+            }
+        </div>
+    </header>
+}
 
 @foreach (var release in Model.Releases)
 {
@@ -15,8 +29,10 @@
     </div>
 }
 
+<hr/>
+
 <h3>Open PGP signatures</h3>
-<h4>PGP keys used to sign the binaries are available below.</h4>
+<h6>PGP keys used to sign the binaries are available below.</h6>
 @foreach (var signatures in Model.Signatures)
 {
     <div class="row">

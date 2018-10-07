@@ -35,7 +35,8 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
             try
             {
                 var packages = await _packageLoader.GetAllAsync()
-                    .ContinueWith(t => t.Result.GroupBy(p => p.Release));
+                    .ContinueWith(t => t.Result.OrderByDescending(p => p.PublishedAt)
+                        .GroupBy(p => p.Release));
 
                 foreach (var package in packages)
                 {
@@ -44,6 +45,7 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
 
                 return new DownloadsViewModel
                 {
+                    LatestRelease = GetLatestRelease(releases),
                     Releases = releases,
                     Signatures = CreateSignatures()
                 };
@@ -55,6 +57,9 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
 
             return new DownloadsViewModel();
         }
+
+        private ReleaseViewModel GetLatestRelease(IList<ReleaseViewModel> releases)
+            => releases.FirstOrDefault(r => r.Type == _packageOptions.Value.Releases.First().Key);
 
         private ReleaseViewModel CreateRelease(string releaseName, int order, IList<PackageDto> packages)
         {

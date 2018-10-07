@@ -5,8 +5,8 @@
     var tabCounter = 1;
 }
 
-<h3>@Model.Title</h3>
-<h4>@Model.Description</h4>
+<h4>@Model.Title</h4>
+<h6>@Model.Description</h6>
 <hr/>
 <ul class="nav nav-tabs" role="tablist">
     @foreach (var platform in Model.Platforms.OrderBy(p => p.Order))
