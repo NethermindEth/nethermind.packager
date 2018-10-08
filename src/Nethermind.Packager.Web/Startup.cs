@@ -15,6 +15,7 @@ using Nethermind.Packager.Core.Services.Storage;
 using Nethermind.Packager.Core.Services.Storage.Azure;
 using Nethermind.Packager.Core.Services.Validators;
 using Nethermind.Packager.Core.Services.Validators.Pgp;
+using Nethermind.Packager.Web.Framework;
 using Nethermind.Packager.Web.ViewModels.Providers;
 
 namespace Nethermind.Packager.Web
@@ -22,7 +23,7 @@ namespace Nethermind.Packager.Web
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -36,6 +37,14 @@ namespace Nethermind.Packager.Web
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", cors =>
+                    cors.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
             });
             services.Configure<AccessOptions>(Configuration.GetSection("access"));
             services.Configure<PackageOptions>(Configuration.GetSection("package"));
@@ -65,6 +74,8 @@ namespace Nethermind.Packager.Web
             }
 
 //            app.UseHttpsRedirection();
+            app.UseMiddleware<ErrorHandlerMiddleware>();
+            app.UseCors("CorsPolicy");
             app.UseStaticFiles();
             app.UseCookiePolicy();
 

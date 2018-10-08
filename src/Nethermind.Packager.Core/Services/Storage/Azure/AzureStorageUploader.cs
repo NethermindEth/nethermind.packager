@@ -15,24 +15,22 @@ namespace Nethermind.Packager.Core.Services.Storage.Azure
         {
             _storageOptions = storageOptions;
         }
-        
+
         public async Task UploadAsync(byte[] bytes, string name)
         {
-            var storageAccount = CloudStorageAccount.Parse(_storageOptions.Value.ConnectionString);
+            var connectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTION_STRING") ??
+                                   _storageOptions.Value.ConnectionString;
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                throw new ArgumentException("Empty Azure storage connection string.", nameof(connectionString));
+            }
+
+            var storageAccount = CloudStorageAccount.Parse(connectionString);
             var blobClient = storageAccount.CreateCloudBlobClient();
             var container = blobClient.GetContainerReference(_storageOptions.Value.Directory);
             var blob = container.GetBlockBlobReference(name);
             await blob.UploadFromByteArrayAsync(bytes, 0, bytes.Length, null,
                 new BlobRequestOptions {StoreBlobContentMD5 = true}, null);
-        }
-        
-        private static string CreateHash(byte[] bytes)
-        {
-            using (var md5 = MD5.Create())
-            {
-                var md5Hash = md5.ComputeHash(bytes);
-                return Convert.ToBase64String(md5Hash);
-            }
         }
     }
 }

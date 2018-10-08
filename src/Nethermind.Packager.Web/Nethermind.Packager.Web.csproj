@@ -12,4 +12,8 @@
     <ProjectReference Include="..\Nethermind.Packager.Core\Nethermind.Packager.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+   <Content Update="appsettings.local.json" CopyToPublishDirectory="Never" />
+  </ItemGroup>
+
 </Project>
