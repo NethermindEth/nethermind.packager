@@ -35,8 +35,7 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
             try
             {
                 var packages = await _packageLoader.GetAllAsync()
-                    .ContinueWith(t => t.Result.OrderByDescending(p => p.PublishedAt)
-                        .GroupBy(p => p.Release));
+                    .ContinueWith(t => t.Result.GroupBy(p => p.Release));
 
                 foreach (var package in packages)
                 {
@@ -65,6 +64,7 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
         {
             var release = _packageOptions.Value.Releases
                 .SingleOrDefault(r => r.Key.Equals(releaseName, StringComparison.InvariantCultureIgnoreCase));
+            packages = packages.OrderByDescending(p => p.PublishedAt).ToList();
             
             var viewModel = new ReleaseViewModel
             {
