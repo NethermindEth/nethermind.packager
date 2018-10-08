@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Nethermind.Packager.Core.Services;
 using Nethermind.Packager.Web.ViewModels;
 using Nethermind.Packager.Web.ViewModels.Providers;
 
@@ -16,19 +17,19 @@ namespace Nethermind.Packager.Web.Controllers
             _downloadsViewModelProvider = downloadsViewModelProvider;
         }
         
+//        [HttpGet]
+//        public IActionResult Index()
+//        {
+//            return View();
+//        }
+//
+//        [HttpGet("install")]
+//        public IActionResult Install()
+//        {
+//            return View();
+//        }
+
         [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        [HttpGet("install")]
-        public IActionResult Install()
-        {
-            return View();
-        }
-
-        [HttpGet("downloads")]
         public async Task<IActionResult> Downloads()
             => View(await _downloadsViewModelProvider.GetAsync());
 

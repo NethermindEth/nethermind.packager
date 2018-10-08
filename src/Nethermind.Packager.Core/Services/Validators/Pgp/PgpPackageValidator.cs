@@ -6,23 +6,16 @@ namespace Nethermind.Packager.Core.Services.Validators.Pgp
 {
     public class PgpPackageValidator : IPackageValidator
     {
-        private readonly IOptions<AccessOptions> _validatorOptions;
+        private readonly IOptions<AccessOptions> _accessOptions;
 
-        public PgpPackageValidator(IOptions<AccessOptions> validatorOptions)
+        public PgpPackageValidator(IOptions<AccessOptions> accessOptions)
         {
-            _validatorOptions = validatorOptions;
+            _accessOptions = accessOptions;
         }
 
         //TODO: PGP validator
         public bool IsValid(byte[] packageBytes, byte[] signatureBytes, string apiKey)
         {
-            var user = _validatorOptions.Value.Users
-                .SingleOrDefault(g => g.Value.SingleOrDefault(u => u.ApiKey == apiKey) != null);
-            if (string.IsNullOrWhiteSpace(user.Key))
-            {
-                return false;
-            }
-
             using (var pgp = new PGP())
             {
                 return signatureBytes != null && signatureBytes.Any();

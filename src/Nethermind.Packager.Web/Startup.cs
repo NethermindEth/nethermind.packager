@@ -43,6 +43,7 @@ namespace Nethermind.Packager.Web
             services.AddTransient<IDownloadsViewModelProvider, DownloadsViewModelProvider>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddHttpClient<IStorageClient, AzureStorageClient>();
+            services.AddTransient<IHashGenerator, HashGenerator>();
             services.AddTransient<IPackageLoader, AzurePackageLoader>();
             services.AddTransient<IStorageUploader, AzureStorageUploader>();
             services.AddTransient<IPackageValidator, PgpPackageValidator>();

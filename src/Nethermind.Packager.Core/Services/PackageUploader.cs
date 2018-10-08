@@ -15,22 +15,29 @@ namespace Nethermind.Packager.Core.Services
     {
         private readonly IStorageUploader _storageUploader;
         private readonly IPackageValidator _packageValidator;
+        private readonly IHashGenerator _hashGenerator;
+        private readonly IOptions<AccessOptions> _accessOptions;
         private readonly IOptions<PackageOptions> _packageOptions;
 
         public PackageUploader(IStorageUploader storageUploader,
             IPackageValidator packageValidator,
+            IHashGenerator hashGenerator,
+            IOptions<AccessOptions> accessOptions,
             IOptions<PackageOptions> packageOptions)
         {
             _storageUploader = storageUploader;
             _packageValidator = packageValidator;
+            _hashGenerator = hashGenerator;
+            _accessOptions = accessOptions;
             _packageOptions = packageOptions;
         }
 
-        public async Task UploadAsync(IReadOnlyCollection<IFormFile> files, string @from)
+        public async Task UploadAsync(IReadOnlyCollection<IFormFile> files, string apiKey)
         {
+            ValidateApiKeyOrFail(apiKey);
             ValidateFilesOrFail(files);
             var filesPackage = await GetFilesPackageAsync(files, _packageOptions.Value.SignatureExtension);
-            ValidateSignatureOrFail(filesPackage, @from);
+            ValidateSignatureOrFail(filesPackage, apiKey);
             
             var filesToUpload = new List<File> {filesPackage.Package};
             if (_packageOptions.Value.ValidateSignature)
@@ -39,6 +46,20 @@ namespace Nethermind.Packager.Core.Services
             }
 
             await UploadAsync(filesToUpload);
+        }
+
+        private void ValidateApiKeyOrFail(string apiKey)
+        {
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                throw new ArgumentException("Empty API key.", nameof(apiKey));
+            }
+
+            var hash = _hashGenerator.Hash(apiKey);
+            if (_accessOptions.Value.ApiKeysHashes.All(h => h != hash))
+            {
+                throw new InvalidOperationException("Invalid API key.");
+            }
         }
 
         private void ValidateFilesOrFail(IReadOnlyCollection<IFormFile> files)
@@ -75,14 +96,14 @@ namespace Nethermind.Packager.Core.Services
             }
         }
         
-        private void ValidateSignatureOrFail(FilesPackage filesPackage, string @from)
+        private void ValidateSignatureOrFail(FilesPackage filesPackage, string apiKey)
         {
             if (!_packageOptions.Value.ValidateSignature)
             {
                 return;
             }
 
-            if (_packageValidator.IsValid(filesPackage.Package.Bytes, filesPackage.Signature.Bytes, @from))
+            if (_packageValidator.IsValid(filesPackage.Package.Bytes, filesPackage.Signature.Bytes, apiKey))
             {
                 return;
             }

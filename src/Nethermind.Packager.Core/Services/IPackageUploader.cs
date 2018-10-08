@@ -6,6 +6,6 @@ namespace Nethermind.Packager.Core.Services
 {
     public interface IPackageUploader
     {
-        Task UploadAsync(IReadOnlyCollection<IFormFile> files, string from);
+        Task UploadAsync(IReadOnlyCollection<IFormFile> files, string apiKey);
     }
 }
