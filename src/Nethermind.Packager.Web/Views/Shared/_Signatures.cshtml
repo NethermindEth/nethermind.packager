@@ -25,5 +25,5 @@
 @functions
 {
     string GetPublicKeyUrl(string publicKey)
-        => $"https://keyserver.ubuntu.com/pks/lookup?op=get&search={publicKey}";
+        => $"https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{publicKey}";
 }
