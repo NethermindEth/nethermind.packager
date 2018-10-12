@@ -96,7 +96,7 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
                         Name = p.Name,
                         Arch = p.Arch,
                         Size = p.Size,
-                        Commit = p.Commit.Substring(0, 6),
+                        Commit = p.Commit?.Length >= 7 ?  p.Commit.Substring(0, 7) : p.Commit?.Substring(0, p.Commit?.Length ?? 0),
                         Kind = p.Kind,
                         Url = p.Url,
                         SignatureUrl = $"{p.Url}.{_packageOptions.Value.SignatureExtension}",
