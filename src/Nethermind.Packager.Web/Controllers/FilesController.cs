@@ -17,6 +17,7 @@ namespace Nethermind.Packager.Web.Controllers
         }
        
         [HttpPost]
+        [RequestFormLimits(ValueLengthLimit = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
         [RequestSizeLimit(350_000_000)]
         public async Task<ActionResult> Post(List<IFormFile> files, string apiKey)
         {
