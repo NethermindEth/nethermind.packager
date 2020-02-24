@@ -131,13 +131,6 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
 
             return viewModel;
         }
-        private static IComparable OrderVersion(string arg)
-        {
-            //Treat N/A as highest version
-            if (arg == "N/A")
-                return new Version(Int32.MaxValue,Int32.MaxValue); 
-            return Version.Parse(arg).ToString();
-        }
 
         private PlatformViewModel CreatePlatform(string name, int order, IEnumerable<PackageDto> packages)
             => new PlatformViewModel
