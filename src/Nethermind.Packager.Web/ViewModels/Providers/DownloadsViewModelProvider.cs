@@ -140,7 +140,6 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
                 Repository = _packageOptions.Value.Repository,
                 Packages = packages
                     .OrderByDescending(p => p.Version, new StringNumberComparer())
-                    .ThenBy(p => p.Version)
                     .Select(p => new PackageViewModel
                     {
                         Name = p.Name,
