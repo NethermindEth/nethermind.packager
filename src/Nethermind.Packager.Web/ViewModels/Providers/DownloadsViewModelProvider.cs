@@ -10,13 +10,60 @@ using Nethermind.Packager.Core.Services.Options;
 
 namespace Nethermind.Packager.Web.ViewModels.Providers
 {
+    public class StringNumberComparer : IComparer<string>
+    {
+        public int Compare(string x, string y)
+        {
+            int compareResult;
+            int xIndex = 0, yIndex = 0;
+            int xIndexLast = 0, yIndexLast = 0;
+            int xNumber, yNumber;
+            int xLength = x.Length;
+            int yLength = y.Length;
+
+            do
+            {
+                bool xHasNextNumber = TryGetNextNumber(x, ref xIndex, out xNumber);
+                bool yHasNextNumber = TryGetNextNumber(y, ref yIndex, out yNumber);
+
+                if (!(xHasNextNumber && yHasNextNumber))
+                {
+                    return x.Substring(xIndexLast).CompareTo(y.Substring(yIndexLast));
+                }
+
+                xIndexLast = xIndex;
+                yIndexLast = yIndex;
+
+                compareResult = xNumber.CompareTo(yNumber);
+            }
+            while (compareResult == 0
+                && xIndex < xLength
+                && yIndex < yLength);
+
+            return compareResult;
+        }
+
+        private bool TryGetNextNumber(string text, ref int startIndex, out int number)
+        {
+            number = 0;
+
+            int pos = text.IndexOf('.', startIndex);
+            if (pos < 0) pos = text.Length;
+
+            if (!int.TryParse(text.Substring(startIndex, pos - startIndex), out number))
+                return false;
+
+            startIndex = pos + 1;
+
+            return true;
+        }
+    }
     public class DownloadsViewModelProvider : IDownloadsViewModelProvider
     {
         private readonly IPackageLoader _packageLoader;
         private readonly IOptions<AccessOptions> _accessOptions;
         private readonly IOptions<PackageOptions> _packageOptions;
         private readonly ILogger<DownloadsViewModelProvider> _logger;
-
         public DownloadsViewModelProvider(IPackageLoader packageLoader,
             IOptions<AccessOptions> accessOptions,
             IOptions<PackageOptions> packageOptions,
@@ -27,7 +74,6 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
             _packageOptions = packageOptions;
             _logger = logger;
         }
-
         public async Task<DownloadsViewModel> GetAsync()
         {
             var releases = new List<ReleaseViewModel>();
@@ -85,6 +131,13 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
 
             return viewModel;
         }
+        private static IComparable OrderVersion(string arg)
+        {
+            //Treat N/A as highest version
+            if (arg == "N/A")
+                return new Version(Int32.MaxValue,Int32.MaxValue); 
+            return Version.Parse(arg).ToString();
+        }
 
         private PlatformViewModel CreatePlatform(string name, int order, IEnumerable<PackageDto> packages)
             => new PlatformViewModel
@@ -93,7 +146,8 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
                 Order = order,
                 Repository = _packageOptions.Value.Repository,
                 Packages = packages
-                    .OrderByDescending(p => p.Version)
+                    .OrderByDescending(p => p.Version, new StringNumberComparer())
+                    .ThenBy(p => p.Version)
                     .Select(p => new PackageViewModel
                     {
                         Name = p.Name,
