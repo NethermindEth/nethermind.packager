@@ -1,11 +1,17 @@
 @model Nethermind.Packager.Web.ViewModels.PlatformViewModel
 
+<style>
+    .hover-item:hover {
+        background-color: #ea8a2b !important;
+    }
+</style>
 
 <table class="table table-striped">
     <thead>
     <tr style="font-weight: bold">
         <td>Release</td>
         <td>Commit</td>
+        <td>Stability</td>
         <td>Kind</td>
         @* <td>Arch</td> *@
         <td>Size</td>
@@ -17,9 +23,14 @@
     <tbody>
     @foreach (var package in Model.Packages)
     {
-        <tr>
+        <tr class='hover-item'>
             <td><a href="@package.Url">@package.Name</a></td>
             <td><a href="@GetCommitUrl(package.Commit)">@package.Commit</a></td>
+            @if (@package.Stability == "stable") {
+                <td><b>@package.Stability</b></td>
+            } else {
+                <td>@package.Stability</td>
+            }
             <td>@package.Kind</td>
             @* <td>@package.Arch</td> *@
             <td>@((package.Size / 1024 / 1024).ToString("F")) MB</td>
