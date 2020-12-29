@@ -49,7 +49,7 @@ namespace Nethermind.Packager.Core.Services.Storage.Azure
         //nethermind-darwin-amd64-1.2.4-unstable-5ff1a481.tar.gz
         private PackageDto Map(Blob blob)
         {
-            var extension = blob.Name.Split('.')?.LastOrDefault()?.ToLowerInvariant();
+            var extension = blob.Name.Split('.')?.LastOrDefault()?.ToLowerInvariant() == "gz" ? "tar.gz" : blob.Name.Split('.')?.LastOrDefault()?.ToLowerInvariant();
             if (!IsExtensionValid(extension))
             {
                 return null;
