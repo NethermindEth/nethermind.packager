@@ -149,7 +149,16 @@ namespace Nethermind.Packager.Core.Services
             => GetExtension(name) == signatureExtension;
 
         private static string GetExtension(string name)
-            => name.Split('.')?.LastOrDefault();
+        {
+            if(name.EndsWith("gz"))
+            {
+                return "tar.gz";
+            } 
+            else
+            {
+                return name.Split('.')?.LastOrDefault();
+            }
+        }
 
         private class FilesPackage
         {

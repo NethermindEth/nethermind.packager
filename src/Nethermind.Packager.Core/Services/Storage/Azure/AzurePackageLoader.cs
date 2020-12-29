@@ -76,7 +76,7 @@ namespace Nethermind.Packager.Core.Services.Storage.Azure
             var arch = parts[2];
             var version = parts[3];
             var commit = parts[4];
-            var release = _packageOptions.Value.Releases.First().Key;
+            var release = "Stable";
             if (parts.Length == 6)
             {
                 release = parts[4];

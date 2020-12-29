@@ -104,7 +104,7 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
         }
 
         private ReleaseViewModel GetLatestRelease(IList<ReleaseViewModel> releases)
-            => releases.FirstOrDefault(r => r.Type == _packageOptions.Value.Releases.First().Key);
+            => releases.FirstOrDefault(r => r.Type == "Stable");
 
         private ReleaseViewModel CreateRelease(string releaseName, int order, IList<PackageDto> packages)
         {
@@ -149,11 +149,10 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
                         Kind = p.Kind,
                         Url = p.Url,
                         SignatureUrl = $"{p.Url}.{_packageOptions.Value.SignatureExtension}",
-                        Stability = p.Stability,
                         Checksum = p.Checksum,
                         PublishedAt = p.PublishedAt,
                         Signature = p.Signature
-                    }).Take(30)
+                    }).Take(10)                
             };
 
         private IEnumerable<SignaturesViewModel> CreateSignatures()

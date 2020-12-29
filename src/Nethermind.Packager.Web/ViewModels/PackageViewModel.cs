@@ -6,7 +6,6 @@ namespace Nethermind.Packager.Web.ViewModels
     {
         public string Name { get; set; }
         public string Commit { get; set; }
-        public string Stability { get; set;}
         public string Kind { get; set; }
         public string Arch { get; set; }
         public double Size { get; set; }
