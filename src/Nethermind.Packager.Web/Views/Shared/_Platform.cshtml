@@ -5,6 +5,7 @@
     <tr style="font-weight: bold">
         <td>Release</td>
         <td>Commit</td>
+        <td>Arch</td>
         <td>Kind</td>
         <td>Size</td>
         <td>Published</td>
@@ -18,6 +19,7 @@
         <tr class='hover-item'>
             <td><a href="@package.Url">@package.Name</a></td>
             <td><a href="@GetCommitUrl(package.Commit)">@package.Commit</a></td>
+            <td>@package.Arch</td>
             <td>@package.Kind</td>
             <td>@((package.Size / 1024 / 1024).ToString("F")) MB</td>
             <td>@package.PublishedAt</td>
