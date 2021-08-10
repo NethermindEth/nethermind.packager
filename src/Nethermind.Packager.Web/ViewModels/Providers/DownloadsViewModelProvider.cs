@@ -122,10 +122,7 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
                 {
                     CreatePlatform("Linux", 1, packages.Where(p => p.Platform.Equals("linux") && p.Name.Contains("nethermind"))),
                     CreatePlatform("Mac", 1, packages.Where(p => p.Platform.Equals("darwin") && p.Name.Contains("nethermind"))),
-                    CreatePlatform("Windows", 1, packages.Where(p => p.Platform.Equals("windows") && p.Name.Contains("nethermind"))),
-                    CreatePlatform("NDM-Linux", 1, packages.Where(p => p.Platform.Equals("linux") && p.Name.Contains("NDM"))),
-                    CreatePlatform("NDM-Mac", 1, packages.Where(p => p.Platform.Equals("darwin") && p.Name.Contains("NDM"))),
-                    CreatePlatform("NDM-Windows", 1, packages.Where(p => p.Platform.Equals("windows") && p.Name.Contains("NDM")))
+                    CreatePlatform("Windows", 1, packages.Where(p => p.Platform.Equals("windows") && p.Name.Contains("nethermind")))
                 }
             };
 

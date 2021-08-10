@@ -9,9 +9,8 @@
     <header class="bg-secondary text-white">
         <div class="container text-center">
             <img src="images/Nethermind_logo_BLACK.png" style='width: 30%;height: 30%' class="img-fluid"/>
-            <h1>Download @Model.LatestRelease.Platforms.FirstOrDefault(p => p.Packages.Any())?.Packages.FirstOrDefault()?.Name
-             or one of NDM Beta releases</h1>
-            <p class="lead">Download the latest 64 bit version of Nethermind or Nethermind Data Marketplace for one of the platforms below</p>
+            <h1>Download @Model.LatestRelease.Platforms.FirstOrDefault(p => p.Packages.Any())?.Packages.FirstOrDefault()?.Name</h1>
+            <p class="lead">Download the latest amd64 & arm64 version of Nethermind for one of the platforms below</p>
             @foreach (var platform in Model.LatestRelease.Platforms.Where(p => p.Packages.Any()))
             {
                 <a href="@platform.Packages.First().Url" class="btn btn-primary">@platform.Name</a>
