@@ -19,7 +19,14 @@
         <tr class='hover-item'>
             <td><a href="@package.Url">@package.Name</a></td>
             <td><a href="@GetCommitUrl(package.Commit)">@package.Commit</a></td>
-            <td>@package.Arch</td>
+            @if(package.Arch == "amd64")
+            {
+                <td><b>amd64</b></td>
+            }
+            else 
+            {
+                <td>arm64</td>
+            }
             <td>@package.Kind</td>
             <td>@((package.Size / 1024 / 1024).ToString("F")) MB</td>
             <td>@package.PublishedAt</td>
