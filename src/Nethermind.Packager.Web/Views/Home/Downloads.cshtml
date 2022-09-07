@@ -13,7 +13,11 @@
             <p class="lead">Download the latest <b>amd64</b> & <b>arm64</b> version of Nethermind for one of the platforms below</p>
             @foreach (var platform in Model.LatestRelease.Platforms.Where(p => p.Packages.Any()))
             {
-                <a href="@platform.Packages.First().Url" class="btn btn-primary">@platform.Name</a>
+                foreach (var package in platform.Packages)
+                {
+                    <a href="@package.Url" class="btn btn-primary m-1">@(platform.Name)-@(package.Arch)</a>
+                }
+                <br/>
             }
         </div>
     </header>

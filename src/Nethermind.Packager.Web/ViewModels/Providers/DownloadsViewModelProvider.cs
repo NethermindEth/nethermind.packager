@@ -90,7 +90,7 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
 
                 return new DownloadsViewModel
                 {
-                    LatestRelease = GetLatestRelease(releases),
+                    LatestRelease = GetLatestRelease(packages),
                     Releases = releases,
                     Signatures = CreateSignatures()
                 };
@@ -103,9 +103,12 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
             return new DownloadsViewModel();
         }
 
-        private ReleaseViewModel GetLatestRelease(IList<ReleaseViewModel> releases)
-            => releases.FirstOrDefault(r => r.Type == "Stable");
-
+        private ReleaseViewModel GetLatestRelease(IEnumerable<IGrouping<string, PackageDto>> packages)
+        {
+            var latestReleasePackages = packages.SingleOrDefault(group => group.Key == "Stable")
+            .GroupBy(p => p.Version).LastOrDefault();
+            return CreateRelease($"Stable-{latestReleasePackages.Key}", 0, latestReleasePackages.ToList());
+        }
         private ReleaseViewModel CreateRelease(string releaseName, int order, IList<PackageDto> packages)
         {
             var release = _packageOptions.Value.Releases
