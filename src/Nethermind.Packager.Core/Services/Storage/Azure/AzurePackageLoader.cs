@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Microsoft.Extensions.Options;
@@ -14,6 +15,7 @@ namespace Nethermind.Packager.Core.Services.Storage.Azure
     {
         private readonly IStorageClient _storageClient;
         private readonly IOptions<PackageOptions> _packageOptions;
+        private readonly Regex _versionRegex = new Regex(@"^\d+\.\d+\.\d+$");
 
         public AzurePackageLoader(IStorageClient storageClient,
             IOptions<PackageOptions> packageOptions)
@@ -39,12 +41,13 @@ namespace Nethermind.Packager.Core.Services.Storage.Azure
             var serializer = new XmlSerializer(typeof(EnumerationResults));
             using (var reader = new StringReader(content))
             {
-                var result = (EnumerationResults) (serializer.Deserialize(reader));
+                var result = (EnumerationResults)(serializer.Deserialize(reader));
 
                 return result.Blobs.Blob.Select(Map).Where(p => !(p is null)).ToList();
             }
         }
 
+        //nethermind-1.16.0-c7df68c6-linux-x64.zip
         //nethermind-darwin-amd64-1.2.3-5ff1a481.tar.gz
         //nethermind-darwin-amd64-1.2.4-unstable-5ff1a481.tar.gz
         private PackageDto Map(Blob blob)
@@ -72,15 +75,17 @@ namespace Nethermind.Packager.Core.Services.Storage.Azure
         private PackageDto CreatePartialPackage(string[] parts)
         {
             var packageName = parts[0];
-            var platform = parts[1];
-            var arch = parts[2];
-            var version = parts[3];
-            var commit = parts[4];
+            var isNewFormat = _versionRegex.IsMatch(parts[1]);
+            var platform = isNewFormat ? parts[3] : parts[1];
+            var arch = isNewFormat ? parts[4] : parts[2];
+            var version = isNewFormat ? parts[1] : parts[3];
+            var commit = isNewFormat ? parts[2] : parts[4];
             var release = "Stable";
+
             if (parts.Length == 6)
             {
-                release = parts[4];
-                commit = parts[5];
+                release = isNewFormat ? parts[2] : parts[4];
+                commit = isNewFormat ? parts[3] : parts[5];
             }
 
             return new PackageDto
