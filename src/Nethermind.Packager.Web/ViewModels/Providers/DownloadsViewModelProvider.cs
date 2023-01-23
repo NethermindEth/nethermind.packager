@@ -80,8 +80,9 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
             var order = 1;
             try
             {
-                var packages = await _packageLoader.GetAllAsync()
-                    .ContinueWith(t => t.Result.GroupBy(p => p.Release));
+                var packages = (await _packageLoader.GetAllAsync())
+                    .OrderBy(p => p.PublishedAt)
+                    .GroupBy(p => p.Release);
 
                 foreach (var package in packages)
                 {

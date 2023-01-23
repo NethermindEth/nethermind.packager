@@ -19,7 +19,7 @@
         <tr class='hover-item'>
             <td><a href="@package.Url">@package.Name</a></td>
             <td><a href="@GetCommitUrl(package.Commit)">@package.Commit</a></td>
-            @if(package.Arch == "amd64" || package.Arch == "x64")
+            @if(package.Arch == "amd64")
             {
                 <td><b>amd64</b></td>
             }

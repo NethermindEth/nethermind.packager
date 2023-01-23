@@ -58,7 +58,7 @@ namespace Nethermind.Packager.Core.Services.Storage.Azure
                 return null;
             }
 
-            var parts = blob.Name?.Split('-');
+            var parts = Path.GetFileNameWithoutExtension(blob.Name ?? string.Empty).Split('-');
             if (!ArePartsValid(parts))
             {
                 return null;
@@ -92,7 +92,7 @@ namespace Nethermind.Packager.Core.Services.Storage.Azure
             {
                 Name = $"{packageName} {version}",
                 Platform = platform,
-                Arch = arch,
+                Arch = arch == "x64" ? "amd64" : arch,
                 Version = version,
                 Commit = commit?.Split('.')?.FirstOrDefault(),
                 Release = release,
