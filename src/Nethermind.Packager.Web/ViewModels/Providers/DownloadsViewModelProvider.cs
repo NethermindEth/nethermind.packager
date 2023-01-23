@@ -124,7 +124,7 @@ namespace Nethermind.Packager.Web.ViewModels.Providers
                 Platforms = new List<PlatformViewModel>
                 {
                     CreatePlatform("Linux", 1, packages.Where(p => p.Platform.Equals("linux") && p.Name.Contains("nethermind"))),
-                    CreatePlatform("Mac", 1, packages.Where(p => p.Platform.Equals("darwin") && p.Name.Contains("nethermind"))),
+                    CreatePlatform("macOS", 1, packages.Where(p => (p.Platform.Equals("darwin") || p.Platform.Equals("macos")) && p.Name.Contains("nethermind"))),
                     CreatePlatform("Windows", 1, packages.Where(p => p.Platform.Equals("windows") && p.Name.Contains("nethermind")))
                 }
             };
